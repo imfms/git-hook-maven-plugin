@@ -2,23 +2,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.cosium.code</groupId>
-    <artifactId>git-code-format-maven-plugin-parent</artifactId>
-    <version>5.3</version>
+    <groupId>ms.imf</groupId>
+    <artifactId>git-hook-maven-plugin-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>git-code-format-maven-plugin</artifactId>
+  <artifactId>git-hook-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
 
-  <name>Git Code Format Maven Plugin</name>
+  <name>Git Hook Maven Plugin</name>
 
   <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>git-code-format-maven-plugin-spi</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
@@ -30,10 +24,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-exec</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.googlejavaformat</groupId>
-      <artifactId>google-java-format</artifactId>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
@@ -104,20 +94,13 @@
             jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
           </argLine>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>google-java-format</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <goalPrefix>git-code-format</goalPrefix>
+          <goalPrefix>git-hook</goalPrefix>
           <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
         </configuration>
         <executions>

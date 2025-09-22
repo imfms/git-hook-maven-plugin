@@ -1,0 +1,23 @@
+package ms.imf.maven.plugin.git.hook.executable;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * @author Réda Housni Alaoui
+ */
+public class CommandRunException extends RuntimeException {
+
+  private final int exitCode;
+
+  public CommandRunException(int exitCode, String output, String... command) {
+    super(
+        String.format(
+            "'%s' failed with code %s: \n\n %s",
+            StringUtils.join(command, StringUtils.SPACE), exitCode, output));
+    this.exitCode = exitCode;
+  }
+
+  public int getExitCode() {
+    return exitCode;
+  }
+}

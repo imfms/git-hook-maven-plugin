@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.1)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17 for Maven Central
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Configure git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run tests
+        run: ./mvnw --batch-mode clean verify
+
+      - name: Set release version
+        run: ./mvnw --batch-mode versions:set -DnewVersion=${{ github.event.inputs.version }} versions:commit
+
+      - name: Deploy release to Maven Central
+        run: ./mvnw --batch-mode clean deploy -P release -DskipTests
+        env:
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSWORD }}
+
+      - name: Commit and tag release
+        run: |
+          git add .
+          git commit -m "Release version ${{ github.event.inputs.version }}"
+          git tag -a "${{ github.event.inputs.version }}" -m "Release version ${{ github.event.inputs.version }}"
+          git push origin master --tags
+
+      - name: Set next development version
+        run: |
+          NEXT_VERSION=$(echo "${{ github.event.inputs.version }}" | awk -F. '{$NF = $NF + 1; print $0"-SNAPSHOT"}' OFS=.)
+          ./mvnw --batch-mode versions:set -DnewVersion=$NEXT_VERSION versions:commit
+          git add .
+          git commit -m "Prepare for next development iteration"
+          git push origin master

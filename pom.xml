@@ -1,16 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.cosium.code</groupId>
-  <artifactId>git-code-format-maven-plugin-parent</artifactId>
-  <version>5.3</version>
+  <groupId>ms.imf</groupId>
+  <artifactId>git-hook-maven-plugin-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Git Code Format Maven Plugin Parent</name>
-  <description>A maven plugin that automatically deploys code formatters
-    as pre-commit git hook
+  <name>Git Hook Maven Plugin Parent</name>
+  <description>A maven plugin that installs custom git hooks
   </description>
-  <url>https://github.com/Cosium/git-code-format-maven-plugin</url>
+  <url>https://github.com/imfms/git-hook-maven-plugin</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,13 +20,10 @@
     <jgit.version>5.13.1.202206130422-r</jgit.version>
     <jacoco.version>0.8.11</jacoco.version>
     <takari-plugin-testing.version>3.0.1</takari-plugin-testing.version>
-    <google-java-format.version>1.19.2</google-java-format.version>
   </properties>
 
   <modules>
-    <module>spi</module>
     <module>core</module>
-    <module>google-java-format</module>
   </modules>
 
   <dependencyManagement>
@@ -51,11 +47,6 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-exec</artifactId>
         <version>${org.apache.commons.exec.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.googlejavaformat</groupId>
-        <artifactId>google-java-format</artifactId>
-        <version>${google-java-format.version}</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.jgit</groupId>
@@ -204,19 +195,24 @@
   </build>
   <profiles>
     <profile>
-      <id>release-sign-artifacts</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
+      <id>release</id>
       <build>
         <plugins>
           <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.9.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
+            <version>3.1.0</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -226,17 +222,11 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.13</version>
-            <extensions>true</extensions>
             <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
-              <autoDropAfterRelease>true</autoDropAfterRelease>
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
             </configuration>
           </plugin>
         </plugins>
@@ -244,35 +234,24 @@
     </profile>
   </profiles>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <scm>
-    <connection>scm:git:https://github.com/Cosium/git-code-format-maven-plugin</connection>
-    <developerConnection>scm:git:https://github.com/Cosium/git-code-format-maven-plugin</developerConnection>
-    <url>https://github.com/Cosium/git-code-format-maven-plugin</url>
-    <tag>5.3</tag>
+    <connection>scm:git:https://github.com/imfms/git-hook-maven-plugin</connection>
+    <developerConnection>scm:git:https://github.com/imfms/git-hook-maven-plugin</developerConnection>
+    <url>https://github.com/imfms/git-hook-maven-plugin</url>
+    <tag>HEAD</tag>
   </scm>
 
   <organization>
-    <name>Cosium</name>
-    <url>http://www.cosium.com</url>
+    <name>f_ms</name>
+    <url>https://imf.ms</url>
   </organization>
 
   <developers>
     <developer>
-      <id>reda-alaoui</id>
-      <name>Réda Housni Alaoui</name>
-      <email>reda-alaoui@hey.com</email>
-      <url>https://github.com/reda-alaoui</url>
+      <id>f_ms</id>
+      <name>f_ms</name>
+      <email>hi@imf.ms</email>
+      <url>https://github.com/imfms</url>
     </developer>
   </developers>
 

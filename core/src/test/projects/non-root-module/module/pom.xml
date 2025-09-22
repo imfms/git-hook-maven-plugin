@@ -6,18 +6,11 @@
   <artifactId>module</artifactId>
   <version>1.00-SNAPSHOT</version>
 
-  <properties>
-    <aosp>false</aosp>
-    <fixImportsOnly>false</fixImportsOnly>
-    <skipSortingImports>false</skipSortingImports>
-    <skipRemovingUnusedImports>false</skipRemovingUnusedImports>
-  </properties>
-
   <build>
     <plugins>
       <plugin>
-        <groupId>com.cosium.code</groupId>
-        <artifactId>git-code-format-maven-plugin</artifactId>
+        <groupId>ms.imf</groupId>
+        <artifactId>git-hook-maven-plugin</artifactId>
         <version>${it-project.version}</version>
         <executions>
           <execution>
@@ -26,19 +19,8 @@
             </goals>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.cosium.code</groupId>
-            <artifactId>google-java-format</artifactId>
-            <version>${it-project.version}</version>
-          </dependency>
-        </dependencies>
         <configuration>
-          <hookMavenThreadCount>1C</hookMavenThreadCount>
-          <propertiesToAdd>
-            <prop>-X</prop>
-          </propertiesToAdd>
-          <propertiesToPropagate>
+          <preCommitPropertiesToPropagate>
             <prop>maven.repo.local</prop>
             <prop>it-project.version</prop>
             <prop>m2e.workspace.state</prop>
@@ -46,14 +28,25 @@
             <prop>workspaceStateProperties</prop>
             <prop>maven.ext.class.path</prop>
             <prop>classworlds.conf</prop>
-          </propertiesToPropagate>
-          <formatterOptions>
-            <googleJavaFormat.aosp>${aosp}</googleJavaFormat.aosp>
-            <googleJavaFormat.fixImportsOnly>${fixImportsOnly}</googleJavaFormat.fixImportsOnly>
-            <googleJavaFormat.skipSortingImports>${skipSortingImports}</googleJavaFormat.skipSortingImports>
-            <googleJavaFormat.skipRemovingUnusedImports>${skipRemovingUnusedImports}
-            </googleJavaFormat.skipRemovingUnusedImports>
-          </formatterOptions>
+          </preCommitPropertiesToPropagate>
+          <prePushPropertiesToPropagate>
+            <prop>maven.repo.local</prop>
+            <prop>it-project.version</prop>
+            <prop>m2e.workspace.state</prop>
+            <prop>workspaceResolver</prop>
+            <prop>workspaceStateProperties</prop>
+            <prop>maven.ext.class.path</prop>
+            <prop>classworlds.conf</prop>
+          </prePushPropertiesToPropagate>
+          <postCommitPropertiesToPropagate>
+            <prop>maven.repo.local</prop>
+            <prop>it-project.version</prop>
+            <prop>m2e.workspace.state</prop>
+            <prop>workspaceResolver</prop>
+            <prop>workspaceStateProperties</prop>
+            <prop>maven.ext.class.path</prop>
+            <prop>classworlds.conf</prop>
+          </postCommitPropertiesToPropagate>
         </configuration>
       </plugin>
     </plugins>
