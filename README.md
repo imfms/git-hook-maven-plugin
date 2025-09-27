@@ -1,5 +1,7 @@
 # Git Hook Maven Plugin
 
+[![Maven Central](https://img.shields.io/maven-central/v/ms.imf/git-hook-maven-plugin.svg)](https://central.sonatype.com/artifact/ms.imf/git-hook-maven-plugin)
+
 [中文](README_zh.md) | English
 
 A maven plugin that installs custom git hooks. Supports both pre-commit and pre-push hooks.
@@ -21,6 +23,8 @@ This example shows all available features:
 <plugin>
   <groupId>ms.imf</groupId>
   <artifactId>git-hook-maven-plugin</artifactId>
+  <!-- Check Maven Central for latest version -->
+  <version>${ms.imf.git-hook-maven-plugin.version}</version>
   <executions>
     <execution>
       <goals>

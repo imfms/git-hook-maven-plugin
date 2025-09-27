@@ -1,5 +1,7 @@
 # Git Hook Maven 插件
 
+[![Maven Central](https://img.shields.io/maven-central/v/ms.imf/git-hook-maven-plugin.svg)](https://central.sonatype.com/artifact/ms.imf/git-hook-maven-plugin)
+
 中文 | [English](README.md)
 
 一个安装自定义 Git hooks 的 Maven 插件。支持 pre-commit、post-commit 和 pre-push hooks。
@@ -21,6 +23,8 @@
 <plugin>
   <groupId>ms.imf</groupId>
   <artifactId>git-hook-maven-plugin</artifactId>
+  <!-- 请检查 Maven Central 获取最新版本 -->
+  <version>${ms.imf.git-hook-maven-plugin.version}</version>
   <executions>
     <execution>
       <goals>
