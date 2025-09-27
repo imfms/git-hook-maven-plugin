@@ -3,7 +3,7 @@
 
   <groupId>ms.imf</groupId>
   <artifactId>git-hook-maven-plugin-parent</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Git Hook Maven Plugin Parent</name>

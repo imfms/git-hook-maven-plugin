@@ -4,7 +4,7 @@
   <parent>
     <groupId>ms.imf</groupId>
     <artifactId>git-hook-maven-plugin-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>git-hook-maven-plugin</artifactId>
