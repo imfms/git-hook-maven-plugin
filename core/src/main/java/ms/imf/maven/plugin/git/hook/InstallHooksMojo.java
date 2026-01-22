@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -318,7 +320,7 @@ public class InstallHooksMojo extends AbstractMavenGitHookMojo {
     if (envVarsToPropagate != null) {
       for (String envVar : envVarsToPropagate) {
         if (envVar != null && !envVar.trim().isEmpty()) {
-          String envValue = System.getenv(envVar.trim());
+          String envValue = getEnvVar(envVar.trim());
           if (envValue != null && !envValue.isEmpty()) {
             content
                 .append("export ")
@@ -330,6 +332,25 @@ public class InstallHooksMojo extends AbstractMavenGitHookMojo {
         }
       }
     }
+  }
+
+  private static final Map<String, String> FIND_FROM_PROPERTY_FIRST_ENV;
+
+  static {
+    FIND_FROM_PROPERTY_FIRST_ENV = new HashMap<>();
+    FIND_FROM_PROPERTY_FIRST_ENV.put("JAVA_HOME", "java.home");
+    FIND_FROM_PROPERTY_FIRST_ENV.put("MAVEN_HOME", "maven.home");
+  }
+
+  private static String getEnvVar(String envVar) {
+    String propertyKey = FIND_FROM_PROPERTY_FIRST_ENV.get(envVar);
+    if (propertyKey != null) {
+        String propertyValue = System.getProperty(propertyKey);
+        if (propertyValue != null && !propertyValue.isEmpty()) {
+            return propertyValue;
+        }
+    }
+    return System.getenv(envVar);
   }
 
   private Path prepareHooksDirectory() {
