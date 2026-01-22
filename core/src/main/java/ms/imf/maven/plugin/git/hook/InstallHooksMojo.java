@@ -19,8 +19,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 /**
- * Installs git hooks on each initialization. Hooks are always
- * overridden in case of changes in:
+ * Installs git hooks on each initialization. Hooks are always overridden in case of changes in:
  *
  * <ul>
  *   <li>maven installation
@@ -284,10 +283,10 @@ public class InstallHooksMojo extends AbstractMavenGitHookMojo {
       if (commandMavenPrefix) {
         // Maven mode
         String mavenExecutable =
-            mavenEnvironment.getMavenExecutable(debug).toAbsolutePath().toString();
+            unixifyPath(mavenEnvironment.getMavenExecutable(debug).toAbsolutePath());
         content.append(mavenExecutable);
         content.append(" -f ");
-        content.append(pomFile().toAbsolutePath().toString());
+        content.append(unixifyPath(pomFile().toAbsolutePath()));
 
         // Get hook-specific properties to propagate
         String[] propertiesToPropagate = hookType.propertiesToPropagateGetter.apply(this);
@@ -306,6 +305,11 @@ public class InstallHooksMojo extends AbstractMavenGitHookMojo {
     // If hookContent is empty, create empty script (just bash header and env vars)
 
     return content.toString();
+  }
+
+  private String unixifyPath(Path path) {
+    String result = path.toAbsolutePath().toString();
+    return "\"" + result.replace("\\", "/") + "\"";
   }
 
   private void addEnvironmentVariables(StringBuilder content, HookType hookType) {
